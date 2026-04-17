@@ -286,7 +286,24 @@ def _evaluate_expression(node: ast.AST, context: dict[str, Any]) -> Any:
 
 @mcp.tool
 def calculate(expression: str, degrees: bool = False) -> dict[str, Any]:
-    """Safely evaluate a calculator expression with arithmetic, trig, logs, statistics, and bitwise operators."""
+    """Use this as the general-purpose technical calculator for one-off or compound math expressions.
+
+    Pass a single expression string when chaining multiple operations is easier than calling the
+    dedicated tools individually. Supports arithmetic, powers, roots, trig, logs, combinatorics,
+    statistics, constants such as pi/tau/e, lists or tuples for functions like mean/median, and
+    bitwise operators.
+
+    Examples:
+    - "2 + 3 * 4"
+    - "sqrt(2)**2 + log10(1000)"
+    - "sin(30)" with degrees=True
+    - "mean([1, 2, 3, 4])"
+    - "gcd(84, 126)"
+    - "2 << 8"
+
+    Use the dedicated MCP tools when you specifically want a single named operation. Use this tool
+    when you want the server to evaluate a full calculator-style expression.
+    """
     parsed = ast.parse(expression, mode="eval")
     result = _evaluate_expression(parsed, _build_expression_context(degrees))
     return {
